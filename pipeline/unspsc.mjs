@@ -1,0 +1,77 @@
+// UNSPSC top-level segment map (first 2 digits of the 8-digit code).
+// Source: United Nations Standard Products and Services Code segment titles.
+// Grouped into readable category names for a general audience.
+
+export const SEGMENTS = {
+  '10': 'Live Plant & Animal Material',
+  '11': 'Mineral & Textile Materials',
+  '12': 'Chemicals',
+  '13': 'Resin & Rubber Materials',
+  '14': 'Paper Materials & Products',
+  '15': 'Fuels & Lubricants',
+  '20': 'Mining & Drilling Machinery',
+  '21': 'Farming & Forestry Machinery',
+  '22': 'Construction & Building Machinery',
+  '23': 'Industrial Manufacturing Machinery',
+  '24': 'Material Handling & Storage',
+  '25': 'Vehicles & Transport',
+  '26': 'Power Generation & Distribution',
+  '27': 'Tools & General Machinery',
+  '30': 'Structures & Construction Materials',
+  '31': 'Manufacturing Components',
+  '32': 'Electronic Components',
+  '39': 'Electrical Systems & Lighting',
+  '40': 'Distribution & Conditioning Systems',
+  '41': 'Laboratory & Scientific Equipment',
+  '42': 'Medical Equipment & Supplies',
+  '43': 'IT & Telecommunications',
+  '44': 'Office Equipment & Supplies',
+  '45': 'Printing & Publishing Equipment',
+  '46': 'Defence, Security & Safety',
+  '47': 'Cleaning Equipment & Supplies',
+  '48': 'Service Industry Equipment',
+  '49': 'Sports & Recreation Equipment',
+  '50': 'Food & Beverage Products',
+  '51': 'Drugs & Pharmaceuticals',
+  '52': 'Household & Office Furnishings',
+  '53': 'Apparel & Personal Care',
+  '54': 'Timepieces & Optical Goods',
+  '55': 'Published Products',
+  '56': 'Furniture & Furnishings',
+  '60': 'Educational & Musical Equipment',
+  '64': 'Financial Instruments & Products',
+  '70': 'Farming & Fishing Services',
+  '71': 'Mining & Oil/Gas Services',
+  '72': 'Building & Construction Services',
+  '73': 'Industrial Production Services',
+  '76': 'Cleaning & Facilities Services',
+  '77': 'Environmental Services',
+  '78': 'Transportation & Logistics Services',
+  '80': 'Management & Business Professional Services',
+  '81': 'Engineering & Research Services',
+  '82': 'Editorial, Design & Media Services',
+  '83': 'Public Utilities & Telecommunications Services',
+  '84': 'Financial & Insurance Services',
+  '85': 'Healthcare Services',
+  '86': 'Education & Training Services',
+  '90': 'Travel, Food & Entertainment Services',
+  '91': 'Personal & Domestic Services',
+  '92': 'National Defence & Public Order',
+  '93': 'Politics & Civic Affairs Services',
+  '94': 'Organisations & Clubs',
+  '95': 'Land & Buildings & Structures',
+};
+
+// Categories that represent professional / consulting-type services (for the Consulting view).
+export const CONSULTING_SEGMENTS = new Set(['80', '81', '82', '84', '86', '93']);
+
+export function segmentOf(unspsc) {
+  const s = String(unspsc || '');
+  if (s.length < 2) return '99';
+  return s.slice(0, 2);
+}
+
+export function segmentName(unspsc) {
+  const seg = segmentOf(unspsc);
+  return SEGMENTS[seg] || 'Other / Unclassified';
+}

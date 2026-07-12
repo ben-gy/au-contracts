@@ -1,0 +1,41 @@
+name: Data Pipeline
+
+on:
+  schedule:
+    - cron: '23 15 * * 1' # Mondays — AusTender publishes weekly
+  workflow_dispatch:
+    inputs:
+      months:
+        description: 'Trailing months to collect'
+        default: '24'
+      end:
+        description: 'End date YYYY-MM-DD (blank = last complete month)'
+        default: '2025-06-30'
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Collect contract notices
+        env:
+          MONTHS: ${{ github.event.inputs.months || '24' }}
+          END: ${{ github.event.inputs.end || '2025-06-30' }}
+          CONCURRENCY: '6'
+        run: node pipeline/collect.mjs
+      - name: Aggregate
+        run: node pipeline/aggregate.mjs
+      - name: Commit data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          git diff --cached --quiet || git commit -m "Update contract data $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push || (git pull --rebase && git push)
