@@ -176,7 +176,7 @@ class App {
         ]),
         el('div', { class: 'footer-attr' }, [
           'Built by ', el('a', { href: 'https://benrichardson.dev/', target: '_blank', rel: 'noopener' }, ['benrichardson.dev']),
-          ' · ', el('a', { href: 'https://hub.benrichardson.dev', target: '_blank', rel: 'noopener' }, ['more tools & sites']),
+          ' · ', el('a', { href: 'https://sites.benrichardson.dev', target: '_blank', rel: 'noopener' }, ['more tools & sites']),
         ]),
       ]),
     ]);
