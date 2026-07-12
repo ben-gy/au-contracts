@@ -11,6 +11,7 @@ import {
 import { infoIcon, labelWithInfo } from './ui.ts';
 import { filterTable } from './store.ts';
 import { renderMap } from './map.ts';
+import { attachSvgZoom } from './utils/svgZoom.ts';
 
 export type ViewKey =
   | 'overview' | 'suppliers' | 'agencies' | 'categories' | 'contracts'
@@ -358,14 +359,16 @@ export function renderContracts(ctx: AppContext): HTMLElement {
 export function renderNetwork(ctx: AppContext): HTMLElement {
   const a = ctx.agg;
   const wrap = el('div', { class: 'view' });
-  wrap.append(panel('Supplier ↔ agency network', 'How the biggest suppliers connect to the agencies that pay them. Circle size = total value; agencies are navy, suppliers coloured by their main category. Hover a node to trace its links.'));
+  wrap.append(panel('Supplier ↔ agency network', 'How the biggest suppliers connect to the agencies that pay them. Circle size = total value; agencies are navy, suppliers coloured by their main category. Hover a node to trace its links; scroll to zoom, drag to pan.'));
   wrap.append(legend([
     { color: 'var(--navy)', label: 'Government agency' },
     { color: 'var(--accent)', label: 'Supplier (colour = category)' },
   ]));
   const box = el('div', { class: 'network-box' });
-  box.append(forceNetwork(a.network.nodes, a.network.links, 1000, 620));
+  const net = forceNetwork(a.network.nodes, a.network.links, 1000, 620);
+  box.append(net);
   wrap.append(box);
+  attachSvgZoom(net as SVGSVGElement);
   wrap.append(el('p', { class: 'view-note' }, [
     `Showing the ${a.network.nodes.length} most-connected entities and their ${a.network.links.length} strongest funding relationships.`,
   ]));

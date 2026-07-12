@@ -216,7 +216,19 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ── Network ── */
 .network-box, .flow-box { background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; }
+.network-box { position: relative; }
 .network { width: 100%; height: auto; display: block; }
+
+/* Wheel-zoom / drag-pan controls (shared svgZoom util) */
+.svg-zoom-controls { position: absolute; top: 10px; right: 10px; z-index: 5; display: flex; flex-direction: column; gap: 4px; }
+.svg-zoom-controls button {
+  width: 30px; height: 30px; display: grid; place-items: center;
+  font-size: 16px; font-weight: 700; line-height: 1;
+  color: var(--text-secondary); background: var(--bg-surface);
+  border: 1px solid var(--border-default); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm); transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.svg-zoom-controls button:hover { background: var(--bg-hover); color: var(--accent); border-color: var(--border-strong); }
 .net-label { fill: var(--text-secondary); font-size: 10px; pointer-events: none; font-weight: 600; }
 .net-node circle { cursor: pointer; transition: filter var(--transition); }
 .net-node:hover circle { filter: brightness(1.1); }

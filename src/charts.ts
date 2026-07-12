@@ -100,25 +100,30 @@ export function treemap(nodes: TreeNode[], width: number, height: number): SVGEl
   return svg;
 }
 
-interface Placed { node: TreeNode; x: number; y: number; w: number; h: number; }
-function layoutTreemap(nodes: TreeNode[], x: number, y: number, w: number, h: number, total: number, horizontal: boolean): Placed[] {
+export interface Placed { node: TreeNode; x: number; y: number; w: number; h: number; }
+export function layoutTreemap(nodes: TreeNode[], x: number, y: number, w: number, h: number, total: number, horizontal: boolean): Placed[] {
   if (nodes.length === 0) return [];
   if (nodes.length === 1) return [{ node: nodes[0], x, y, w, h }];
   // Split the list into two halves of roughly equal value.
   let half = 0; let i = 0;
   const target = total / 2;
   while (i < nodes.length - 1 && half + nodes[i].value < target) { half += nodes[i].value; i++; }
+  // Guarantee both partitions are non-empty. When the leading node already
+  // meets/exceeds the target (or the group is all-equal/all-zero) the loop
+  // leaves i at 0, which would recurse on the identical list forever.
+  if (i === 0) i = 1;
   const first = nodes.slice(0, i);
   const second = nodes.slice(i);
   const firstVal = first.reduce((s, n) => s + n.value, 0);
   const secondVal = total - firstVal;
+  const frac = total > 0 ? firstVal / total : 0; // guard 0/0 for a zero-value group
   const out: Placed[] = [];
   if (horizontal) {
-    const w1 = w * (firstVal / total);
+    const w1 = w * frac;
     out.push(...layoutTreemap(first, x, y, w1, h, firstVal, false));
     out.push(...layoutTreemap(second, x + w1, y, w - w1, h, secondVal, false));
   } else {
-    const h1 = h * (firstVal / total);
+    const h1 = h * frac;
     out.push(...layoutTreemap(first, x, y, w, h1, firstVal, true));
     out.push(...layoutTreemap(second, x, y + h1, w, h - h1, secondVal, true));
   }
