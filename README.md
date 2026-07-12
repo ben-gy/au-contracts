@@ -20,7 +20,7 @@ Journalists chasing procurement stories, policy and budget analysts comparing ag
 
 | Source | What it provides | Update frequency |
 |--------|-------------------|-----------------|
-| [AusTender Open Contracting (OCDS) API](https://www.tenders.gov.au/) | Every published Commonwealth contract notice: supplier, procuring agency, value (AUD), signing dates, UNSPSC category, procurement method, supplier region | Continuously; this site re-collects weekly |
+| [AusTender Open Contracting (OCDS) API](https://www.tenders.gov.au/) | Every published Commonwealth contract notice: supplier, procuring agency, value (AUD), signing dates, UNSPSC category, procurement method, supplier region | Continuously; this site re-collects quarterly |
 
 ## Features
 
@@ -66,7 +66,7 @@ npm run preview
 
 ## How it works
 
-A GitHub Actions pipeline runs weekly:
+A GitHub Actions pipeline runs quarterly:
 
 1. `pipeline/collect.mjs` pages through the live AusTender OCDS API for the most recent complete financial year, extracting one compact row per contract into `pipeline/raw.json`.
 2. `pipeline/aggregate.mjs` reads that file and precomputes every dashboard view over **all** contracts — leaderboards, network, flow, matrix, monthly series, histogram and insights — writing a small `aggregates.json`. It also writes `contracts.json`, the largest contracts for the searchable table, with a disclosed minimum-value threshold so nothing is silently hidden.
